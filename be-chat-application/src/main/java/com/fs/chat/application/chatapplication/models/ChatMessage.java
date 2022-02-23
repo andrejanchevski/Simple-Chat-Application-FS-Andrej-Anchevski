@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class ChatMessage {
     private String senderName;
-    private String body;
-    private String date;
+    private String messageBody;
+    private String dateCreated;
     private MessageType messageType;
 }

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatRoomController {
 
-    @MessageMapping
+    @MessageMapping("/message")
     @SendTo("/chatroom/public")
-    public ChatMessage receivePublicMessage(@Payload ChatMessage message){
-        return message;
+    public ChatMessage receivePublicMessage(@Payload ChatMessage chatMessage){
+        return chatMessage;
     }
 
 }
