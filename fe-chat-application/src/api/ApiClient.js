@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosClient = axios.create({
-    baseURL: `https://localhost:8080/app/chat-room`,
+    baseURL: `http://localhost:8080/app/chat-room`,
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

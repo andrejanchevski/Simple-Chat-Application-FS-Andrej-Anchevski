@@ -34,3 +34,6 @@ build/
 
 ### Secure Bundle ###
 src/main/resources/secure-connect-simplechatapplication.zip
+
+#DataStaxConfiguration
+src/main/resources/application.yml
