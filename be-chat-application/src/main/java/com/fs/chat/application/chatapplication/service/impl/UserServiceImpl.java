@@ -26,9 +26,6 @@ public class UserServiceImpl implements UserService {
                     User.builder()
                             .userId(UUID.randomUUID().toString())
                             .userName(userName)
-                            .email("")
-                            .firstName("")
-                            .lastName("")
                             .dateCreated(LocalDateTime.now())
                             .build()
             );
