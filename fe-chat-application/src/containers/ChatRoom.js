@@ -3,6 +3,8 @@ import SendChatMessageForm from "../components/SendChatMessageForm";
 import ChatBox from "../components/ChatBox";
 import {useUserContext, useUserMessageUpdateContext} from "../context/UserContext";
 import {WebSocketService} from "../api/WebSocketService";
+import {format} from "date-fns";
+import {fetchAllChatRoomMessages} from "../api/ApiService";
 
 const ChatRoom = () => {
 
@@ -10,6 +12,16 @@ const ChatRoom = () => {
     const setUserMessage = useUserMessageUpdateContext();
     const [wsClient, setWsClient] = useState(null);
     const [publicChatMessages, setPublicChatMessages] = useState([]);
+    const [dateIndicatorForFetch, setDateIndicatorForFetch] = useState(format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"))
+
+    useEffect(() => {
+        fetchAllChatRoomMessages(1)
+            .then((res) => {
+                setPublicChatMessages((currentMessages) => ([...res.data,...currentMessages]))
+            })
+    }, [dateIndicatorForFetch])
+
+
 
     useEffect(() => {
         initStompClient();
@@ -69,6 +81,7 @@ const ChatRoom = () => {
             setUserMessage("");
         }
     }
+
     return (
         <div className="container w-25 justify-content-center mt-5 border rounded">
             <div className="row" style={{minHeight: "75vh", maxHeight: "75vh"}}>

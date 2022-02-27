@@ -23,12 +23,19 @@ public class ChatRoomMessageController {
         this.chatRoomMessageMapper = chatRoomMessageMapper;
     }
 
-    @GetMapping()
+    @GetMapping("")
+    List<SendMessageResponse> findAllChatMessagesForChatRoom(@RequestParam(name = "chatRoomId") Long chatRoomId){
+        return chatRoomMessageMapper.fetchAllChatRoomMessages(chatRoomId);
+
+    }
+
+    @GetMapping("/paged")
     ChatRoomMessagePageResponse fetchMessagesPageable(@RequestParam(name = "pageSize") Integer pageSize,
                                                       @RequestParam(name = "chatRoomId") Long chatRoomId,
                                                       @RequestParam(name = "pagingState", required = false) String pagingState){
         return this.chatRoomMessageMapper.fetchMessagesPageable(pageSize, chatRoomId, Optional.ofNullable(pagingState));
     }
+
 
     @GetMapping("/archived")
     List<SendMessageResponse> fetchChatRoomMessagesBeforeDate(@RequestParam(name = "beforeDate")

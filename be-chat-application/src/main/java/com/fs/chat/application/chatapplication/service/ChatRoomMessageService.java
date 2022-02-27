@@ -18,4 +18,5 @@ public interface ChatRoomMessageService {
                                                   @Nullable String pagingState);
 
     List<ChatRoomMessage> getChatRoomMessagesCreatedBefore(LocalDateTime boundedDateTime, Long chatRoomId);
+    List<ChatRoomMessage> fetchAllChatRoomMessages(Long chatRoomId);
 }

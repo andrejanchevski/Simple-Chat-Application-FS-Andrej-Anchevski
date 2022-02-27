@@ -16,4 +16,6 @@ public interface ChatRoomMessageRepository extends CassandraRepository<ChatRoomM
     Slice<ChatRoomMessage> findChatRoomMessagesByChatRoomIdAndDateCreatedLessThan(Long chatRoomId,
                                                                                  LocalDateTime dateCreated,
                                                                                   CassandraPageRequest cassandraPageRequest);
+
+    List<ChatRoomMessage> findAllByChatRoomId(Long chatRoomId);
 }

@@ -12,4 +12,5 @@ public interface ChatRoomMessageMapper {
     SendMessageResponse sendAndSaveChatRoomMessage(SendMessageRequest sendMessageRequest);
     ChatRoomMessagePageResponse fetchMessagesPageable(Integer pageSize, Long chatRoomId, Optional<String> pagingState);
     List<SendMessageResponse> fetchChatRoomMessagesBefore(Long chatRoomId, LocalDateTime beforeDate);
+    List<SendMessageResponse> fetchAllChatRoomMessages(Long chatRoomId);
 }

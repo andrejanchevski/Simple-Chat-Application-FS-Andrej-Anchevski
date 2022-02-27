@@ -92,6 +92,19 @@ public class ChatRoomMessageMapperImpl implements ChatRoomMessageMapper {
                 collect(Collectors.toList());
     }
 
+    @Override
+    public List<SendMessageResponse> fetchAllChatRoomMessages(Long chatRoomId) {
+        return chatRoomMessageService.fetchAllChatRoomMessages(chatRoomId).stream()
+                .map(chatRoomMessage -> SendMessageResponse.builder()
+                        .messageBody(chatRoomMessage.getMessageContent())
+                        .messageType(chatRoomMessage.getMessageType().name())
+                        .senderName(chatRoomMessage.getUserName())
+                        .senderId(chatRoomMessage.getUserId())
+                        .dateCreated(chatRoomMessage.getDateCreated().format(formatter))
+                        .build()).
+                collect(Collectors.toList());
+    }
+
 
     @Nullable
     private static <T> String getPagingState(final Slice<T> slice) {

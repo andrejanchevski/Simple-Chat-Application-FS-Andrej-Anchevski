@@ -53,4 +53,9 @@ public class ChatRoomMessageServiceImpl implements ChatRoomMessageService {
         return chatRoomMessageRepository.findChatRoomMessagesByChatRoomIdAndDateCreatedLessThan(chatRoomId,
                 boundedDateTime, CassandraPageRequest.of(0, 10)).getContent();
     }
+
+    @Override
+    public List<ChatRoomMessage> fetchAllChatRoomMessages(Long chatRoomId) {
+        return chatRoomMessageRepository.findAllByChatRoomId(chatRoomId);
+    }
 }
