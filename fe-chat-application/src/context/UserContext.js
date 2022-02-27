@@ -43,16 +43,18 @@ export const useUserMessageUpdateContext = () => {
 export const UserContextProvider = ({children}) => {
     const [currentUser, setUser] = useState({
         userName: "",
+        userId: "",
         active: false,
         currentMessage: ""
+
     });
 
     const setUserName = (newUsername) => {
         setUser(current => ({...current, userName: newUsername}))
     };
 
-    const makeUserActive = () => {
-        setUser(current => ({...current, active: true}))
+    const makeUserActive = (userId) => {
+        setUser(current => ({...current, active: true, userId: userId}))
     }
 
     const setUserMessage = (newMessage) => {

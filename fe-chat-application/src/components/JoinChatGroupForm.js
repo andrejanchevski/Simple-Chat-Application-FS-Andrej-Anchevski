@@ -1,6 +1,7 @@
 import React from "react";
 import {useActiveUpdateContext, useUserContext, useUserNameUpdateContext} from "../context/UserContext";
 import {useNavigate} from "react-router-dom";
+import {saveUser} from "../api/ApiService";
 
 
 const JoinChatGroupForm = () => {
@@ -13,9 +14,10 @@ const JoinChatGroupForm = () => {
 
     const handleUserSubmit = (event) => {
         event.preventDefault();
-        setUserActive();
-        navigate('/chatRoom');
-
+        saveUser({userName: currentUser.userName}).then((res) => {
+            // setUserActive();
+            // navigate('/chatRoom');
+        })
     }
 
     const handleUserNameChange = (event) =>{
