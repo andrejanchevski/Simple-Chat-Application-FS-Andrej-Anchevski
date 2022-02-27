@@ -1,5 +1,6 @@
 package com.fs.chat.application.chatapplication.models;
 
+import com.fs.chat.application.chatapplication.models.enums.MessageType;
 import lombok.*;
 
 @AllArgsConstructor

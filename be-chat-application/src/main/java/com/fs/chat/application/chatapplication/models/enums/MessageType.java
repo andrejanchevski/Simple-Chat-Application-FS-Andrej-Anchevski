@@ -1,4 +1,4 @@
-package com.fs.chat.application.chatapplication.models;
+package com.fs.chat.application.chatapplication.models.enums;
 
 public enum MessageType {
     JOIN,
