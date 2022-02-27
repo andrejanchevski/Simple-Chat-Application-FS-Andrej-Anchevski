@@ -15,8 +15,8 @@ const JoinChatGroupForm = () => {
     const handleUserSubmit = (event) => {
         event.preventDefault();
         saveUser({userName: currentUser.userName}).then((res) => {
-            // setUserActive();
-            // navigate('/chatRoom');
+            setUserActive(res.data.userId);
+            navigate('/chatRoom');
         })
     }
 

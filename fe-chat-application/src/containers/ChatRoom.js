@@ -51,6 +51,7 @@ const ChatRoom = () => {
         const chatJoinMessage = {
             senderName: currentUser.userName,
             messageType: "JOIN",
+            userId: currentUser.userId,
         };
         wsClient.send("/app/message", {}, JSON.stringify(chatJoinMessage));
     }
@@ -61,7 +62,8 @@ const ChatRoom = () => {
             let chatMessage = {
                 senderName: currentUser.userName,
                 messageType: "MESSAGE",
-                messageBody: currentUser.currentMessage
+                messageBody: currentUser.currentMessage,
+                userId: currentUser.userId
             };
             wsClient.send("/app/message", {}, JSON.stringify(chatMessage));
             setUserMessage("");

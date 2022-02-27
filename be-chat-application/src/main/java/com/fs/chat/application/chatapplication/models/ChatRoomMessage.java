@@ -31,7 +31,7 @@ public class ChatRoomMessage {
     @Column("message_content")
     private String messageContent;
 
-    @CassandraType(type = CassandraType.Name.BIGINT)
+    @Column("message_type")
     private MessageType messageType;
 
     @PrimaryKeyColumn(name = "user_id", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
