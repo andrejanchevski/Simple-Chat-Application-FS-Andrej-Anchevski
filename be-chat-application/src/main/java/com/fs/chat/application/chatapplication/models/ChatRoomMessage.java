@@ -17,11 +17,9 @@ import java.time.LocalDateTime;
 public class ChatRoomMessage {
 
     @PrimaryKeyColumn(name = "chat_room_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-    @Indexed
     private Long chatRoomId;
 
     @PrimaryKeyColumn(name = "date_created", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
-    @Indexed
     private LocalDateTime dateCreated;
 
     @Column("message_id")
@@ -33,7 +31,7 @@ public class ChatRoomMessage {
     @Column("message_type")
     private MessageType messageType;
 
-    @PrimaryKeyColumn(name = "user_id", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
+    @Column("user_id")
     private String userId;
 
     @Column("user_name")

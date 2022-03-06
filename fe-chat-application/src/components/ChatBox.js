@@ -8,19 +8,13 @@ const ChatBox = (props) => {
     const currentUser = useUserContext();
     const topChatBoxDivRef = useRef();
     const chatBoxDivRef = useRef();
-    const bottomChatBoxDivRef = useRef();
 
-    useEffect(() => {
-    })
+    useEffect(() => {})
 
     const scrollChatBox = () => {
        if (topChatBoxDivRef.current.getBoundingClientRect().top === chatBoxDivRef.current.getBoundingClientRect().top){
+           props.onTopChatBoxScroll();
        }
-    }
-
-    const scrollToLastMessage = () => {
-        const bottomChatBoxDiv = bottomChatBoxDivRef.current;
-        bottomChatBoxDiv.scrollIntoView();
     }
 
     return (
@@ -38,7 +32,6 @@ const ChatBox = (props) => {
                         key={index}/> :
                     <UserJoinedChatMessage senderName={chatMessage.senderName} key={index}/>
             })}
-            <div ref={bottomChatBoxDivRef}></div>
         </div>
     )
 }
