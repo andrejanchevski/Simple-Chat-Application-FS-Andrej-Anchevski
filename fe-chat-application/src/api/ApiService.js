@@ -11,3 +11,10 @@ export const fetchLatestMessagesAfterSomeDate = (chatRoomId, dateBefore) => {
 export const fetchAllChatRoomMessages = (chatRoomId) => {
     return axiosClient.get(`/chat-messages?chatRoomId=${chatRoomId}`)
 }
+
+export const fetchChatRoomMessagesByPage = (chatRoomId, pageSize, pagingState) => {
+    const urlString = pagingState ?
+        `/chat-messages/paged?chatRoomId=${chatRoomId}&pageSize=${pageSize}&pagingState=${pagingState}`
+        : `/chat-messages/paged?chatRoomId=${chatRoomId}&pageSize=${pageSize}`;
+    return axiosClient.get(urlString);
+}
