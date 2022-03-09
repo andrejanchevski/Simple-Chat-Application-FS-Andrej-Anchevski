@@ -7,14 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
@@ -24,7 +23,6 @@ public class UserServiceImpl implements UserService {
         if(optionalUser.isEmpty()){
             return userRepository.save(
                     User.builder()
-                            .userId(UUID.randomUUID().toString())
                             .userName(userName)
                             .dateCreated(LocalDateTime.now())
                             .build()

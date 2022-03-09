@@ -1,42 +1,44 @@
 package com.fs.chat.application.chatapplication.models;
 
-
 import com.fs.chat.application.chatapplication.models.enums.MessageType;
-import lombok.*;
-import org.springframework.data.cassandra.core.cql.Ordering;
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Table(value = "chat_room_messages")
+@Entity
+@Table(name = "chat_messages")
 public class ChatRoomMessage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long messageId;
 
-    @PrimaryKeyColumn(name = "chat_room_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-    private Long chatRoomId;
+    @Column(name = "message_body")
+    private String messageBody;
 
-    @PrimaryKeyColumn(name = "date_created", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
-    private LocalDateTime dateCreated;
-
-    @Column("message_id")
-    private String messageId;
-
-    @Column("message_content")
-    private String messageContent;
-
-    @Column("message_type")
+    @Column(name = "message_type")
     private MessageType messageType;
 
-    @Column("user_id")
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column("user_name")
-    private String userName;
+    @ManyToOne
+    @JoinColumn(name = "chat_room_id")
+    private ChatRoom chatRoom;
 
+    @Column(name = "date_created")
+    @CreatedDate
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
 
 }

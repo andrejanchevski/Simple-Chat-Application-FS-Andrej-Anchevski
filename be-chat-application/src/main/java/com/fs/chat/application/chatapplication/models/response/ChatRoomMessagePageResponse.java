@@ -14,7 +14,5 @@ import java.util.List;
 public class ChatRoomMessagePageResponse {
     private Integer page;
     private Integer pageSize;
-    private List<SendMessageResponse> chatMessages;
-    private Boolean hasNext;
-    private String pagingState;
+    private List<ChatRoomMessageResponse> chatMessages;
 }

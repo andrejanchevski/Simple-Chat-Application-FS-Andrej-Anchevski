@@ -9,7 +9,8 @@ const ChatBox = (props) => {
     const topChatBoxDivRef = useRef();
     const chatBoxDivRef = useRef();
 
-    useEffect(() => {})
+    useEffect(() => {
+    })
 
     const scrollChatBox = () => {
        if (topChatBoxDivRef.current.getBoundingClientRect().top === chatBoxDivRef.current.getBoundingClientRect().top){

@@ -5,7 +5,6 @@ import {useUserContext, useUserMessageUpdateContext} from "../context/UserContex
 import {WebSocketService} from "../api/WebSocketService";
 import {useNavigate} from "react-router-dom";
 import {fetchChatRoomMessagesByPage} from "../api/ApiService";
-import userJoinedChatMessage from "../components/UserJoinedChatMessage";
 
 const ChatRoom = () => {
 
@@ -13,15 +12,18 @@ const ChatRoom = () => {
     const setUserMessage = useUserMessageUpdateContext();
     const [wsClient, setWsClient] = useState(null);
     const [publicChatMessages, setPublicChatMessages] = useState([]);
-    const [nextPagingState, setPagingState] = useState(null);
+    const [nextPageForFetch, setNextPageForFetch] = useState(0);
+    const [boundaryDateForFetch, setBoundaryDateForFetch] = useState(new Date())
     const navigate = useNavigate();
 
 
     useEffect(() => {
         currentUser.active ? initStompClient() : navigate('/login');
-        fetchChatRoomMessagesByPage(1, 3).then((res) => {
-            setPagingState(res.data.pagingState)
-        });
+        fetchChatRoomMessagesByPage(1, 10, nextPageForFetch, boundaryDateForFetch).then((res) => {
+            setPublicChatMessages((currentMessages) => ([...currentMessages, ...res.data.chatMessages]))
+            setBoundaryDateForFetch(new Date())
+            setNextPageForFetch((currentPage) => currentPage + 1)
+        })
         return () => {
             if (wsClient) {
                 wsClient.unsubscribe().then(() => {
@@ -61,6 +63,7 @@ const ChatRoom = () => {
             senderName: currentUser.userName,
             messageType: "JOIN",
             userId: currentUser.userId,
+            chatRoomId: 1
         };
         wsClient.send("/app/message", {}, JSON.stringify(chatJoinMessage));
     }
@@ -72,7 +75,8 @@ const ChatRoom = () => {
                 senderName: currentUser.userName,
                 messageType: "MESSAGE",
                 messageBody: currentUser.currentMessage,
-                userId: currentUser.userId
+                userId: currentUser.userId,
+                chatRoomId: 1
             };
             wsClient.send("/app/message", {}, JSON.stringify(chatMessage));
             setUserMessage("");
@@ -80,9 +84,10 @@ const ChatRoom = () => {
     }
 
     const fetchNewMessagesPage = () => {
-        fetchChatRoomMessagesByPage(1, 3, nextPagingState).then((res) => {
-            console.log('PLEASE WORK',res);
-        });
+        fetchChatRoomMessagesByPage(1, 10, nextPageForFetch, boundaryDateForFetch).then((res) => {
+            setPublicChatMessages((currentMessages) => ([ ...res.data.chatMessages,... currentMessages]))
+            setNextPageForFetch((currentPage) => currentPage + 1)
+        })
     }
 
     return (

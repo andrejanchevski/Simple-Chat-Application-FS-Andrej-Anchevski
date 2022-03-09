@@ -1,10 +1,11 @@
 package com.fs.chat.application.chatapplication.models.request;
 
-public record SendMessageRequest(
+public record ChatMessageRequest(
         String senderName,
-        String userId,
+        Long userId,
         String messageBody,
-        String messageType
+        String messageType,
+        Long chatRoomId
 ){
 
 }

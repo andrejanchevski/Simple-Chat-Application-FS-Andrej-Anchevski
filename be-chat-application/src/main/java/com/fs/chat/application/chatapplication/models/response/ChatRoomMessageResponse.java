@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SendMessageResponse{
+public class ChatRoomMessageResponse {
     private String senderName;
     private String messageBody;
     private String messageType;
     private String dateCreated;
-    private String senderId;
+    private Long senderId;
 }

@@ -1,8 +1,8 @@
 package com.fs.chat.application.chatapplication.controller;
 
 import com.fs.chat.application.chatapplication.mapper.ChatRoomMessageMapper;
-import com.fs.chat.application.chatapplication.models.request.SendMessageRequest;
-import com.fs.chat.application.chatapplication.models.response.SendMessageResponse;
+import com.fs.chat.application.chatapplication.models.request.ChatMessageRequest;
+import com.fs.chat.application.chatapplication.models.response.ChatRoomMessageResponse;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +17,7 @@ public class ChatRoomWebSocketMessageController {
     }
 
     @MessageMapping("/message")
-    public SendMessageResponse receivePublicMessage(@Payload SendMessageRequest chatMessage){
+    public ChatRoomMessageResponse receivePublicMessage(@Payload ChatMessageRequest chatMessage){
         return chatRoomMessageMapper.sendAndSaveChatRoomMessage(chatMessage);
     }
 

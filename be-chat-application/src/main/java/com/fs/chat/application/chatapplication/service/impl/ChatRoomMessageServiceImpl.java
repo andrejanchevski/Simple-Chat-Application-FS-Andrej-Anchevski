@@ -1,61 +1,65 @@
 package com.fs.chat.application.chatapplication.service.impl;
 
-import com.datastax.oss.driver.api.core.cql.PagingState;
+import com.fs.chat.application.chatapplication.exceptions.ResourceNotFoundException;
+import com.fs.chat.application.chatapplication.models.ChatRoom;
 import com.fs.chat.application.chatapplication.models.ChatRoomMessage;
+import com.fs.chat.application.chatapplication.models.User;
 import com.fs.chat.application.chatapplication.models.enums.MessageType;
 import com.fs.chat.application.chatapplication.repository.ChatRoomMessageRepository;
+import com.fs.chat.application.chatapplication.repository.ChatRoomRepository;
+import com.fs.chat.application.chatapplication.repository.UserRepository;
 import com.fs.chat.application.chatapplication.service.ChatRoomMessageService;
-import lombok.val;
-import org.springframework.data.cassandra.core.query.CassandraPageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ChatRoomMessageServiceImpl implements ChatRoomMessageService {
 
+    private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMessageRepository chatRoomMessageRepository;
+    private final UserRepository userRepository;
 
-    public ChatRoomMessageServiceImpl(ChatRoomMessageRepository chatRoomMessageRepository){
+    public ChatRoomMessageServiceImpl(ChatRoomRepository chatRoomRepository,
+                                      ChatRoomMessageRepository chatRoomMessageRepository,
+                                      UserRepository userRepository) {
         this.chatRoomMessageRepository = chatRoomMessageRepository;
+        this.chatRoomRepository = chatRoomRepository;
+        this.userRepository = userRepository;
+    }
+
+
+    @Override
+    public Page<ChatRoomMessage> findLatestChatMessages(Long chatRoomId, LocalDateTime boundedDate,
+                                                        Integer pageSize, Integer page) {
+        Pageable sortedByDateCreated = PageRequest.of(page, pageSize, Sort.by("dateCreated").descending());
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new ResourceNotFoundException(chatRoomId, ChatRoom.class));
+        return chatRoomMessageRepository.findAllByChatRoomAndDateCreatedLessThan(chatRoom, boundedDate, sortedByDateCreated);
     }
 
     @Override
-    public ChatRoomMessage saveChatRoomMessage(String userId, String senderName, String messageBody, String messageType) {
+    public ChatRoomMessage saveChatRoomMessage(Long chatRoomId,
+                                               Long userId, String userName, String messageBody, String messageType) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(userId, User.class));
+
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new ResourceNotFoundException(chatRoomId, ChatRoom.class));
+
+
         return this.chatRoomMessageRepository.save(
                 ChatRoomMessage.builder()
-                        .chatRoomId(1L)
-                        .messageContent(messageBody)
-                        .messageId(UUID.randomUUID().toString())
+                        .chatRoom(chatRoom)
+                        .user(user)
                         .messageType(MessageType.valueOf(messageType))
+                        .messageBody(messageBody)
                         .dateCreated(LocalDateTime.now())
-                        .userId(userId)
-                        .userName(senderName)
-                        .build());
-    }
-    @Override
-    public Slice<ChatRoomMessage> getChatRoomMessagePage(Integer pageSize,
-                                                         Long chatRoomId,
-                                                         @Nullable String pagingState) {
-        val pageState = pagingState != null ? PagingState.fromString(pagingState).getRawPagingState() : null;
-        CassandraPageRequest cassandraPageRequest = CassandraPageRequest.of(PageRequest.of(0, pageSize),
-                pageState);
-        return chatRoomMessageRepository.findChatRoomMessagesByChatRoomId(chatRoomId, cassandraPageRequest);
-    }
-
-    @Override
-    public List<ChatRoomMessage> getChatRoomMessagesCreatedBefore(LocalDateTime boundedDateTime, Long chatRoomId) {
-        return chatRoomMessageRepository.findChatRoomMessagesByChatRoomIdAndDateCreatedLessThan(chatRoomId,
-                boundedDateTime, CassandraPageRequest.of(0, 10)).getContent();
-    }
-
-    @Override
-    public List<ChatRoomMessage> fetchAllChatRoomMessages(Long chatRoomId) {
-        return chatRoomMessageRepository.findAllByChatRoomId(chatRoomId);
+                        .build()
+        );
     }
 }

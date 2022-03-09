@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UserResponse {
-    private String userId;
+    private Long userId;
     private String userName;
 }

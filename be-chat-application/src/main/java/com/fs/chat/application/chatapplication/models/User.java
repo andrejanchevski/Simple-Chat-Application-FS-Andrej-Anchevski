@@ -1,44 +1,41 @@
 package com.fs.chat.application.chatapplication.models;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.Indexed;
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
-import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Table(value = "users")
+@Entity
+@Table(name = "users")
 public class User {
-
     @Id
-    @PrimaryKeyColumn(name = "user_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-    public String userId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long userId;
 
-    @Column("user_name")
-    @Indexed
-    public String userName;
+    @Column(name = "user_name")
+    private String userName;
 
-    public String password;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column("first_name")
-    public String firstName;
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column("last_name")
-    public String lastName;
+    private String password;
+    private String email;
 
-    public String email;
-
-    @Column("date_created")
-    public LocalDateTime dateCreated;
+    @Column(name = "date_created")
+    @CreatedDate
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
 }
